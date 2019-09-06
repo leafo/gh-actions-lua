@@ -26,6 +26,14 @@ async function main() {
     }
   })
 
+  await exec.exec("pwd", undefined, {
+    cwd: luaExtractPath
+  })
+
+  await exec.exec("ls", undefined, {
+    cwd: luaExtractPath
+  })
+
   await exec.exec("make -j linux", undefined, {
     cwd: luaExtractPath
   })
