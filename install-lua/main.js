@@ -35,11 +35,40 @@ async function install_luajit_openresty() {
   })
 }
 
+async function install_luajit(luajitVersion) {
+  const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `LuaJIT-${luajitVersion}`)
+  const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
+
+  const luaSourceTar = await tc.downloadTool(`http://luajit.org/download/LuaJIT-${luajitVersion}.tar.gz`)
+  await io.mkdirP(luaExtractPath)
+  await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
+
+  await exec.exec("make -j", undefined, {
+    cwd: luaExtractPath
+  })
+
+  await exec.exec(`make -j install PREFIX="${luaInstallPath}"`, undefined, {
+    cwd: luaExtractPath
+  })
+
+  core.addPath(path.join(luaInstallPath, "bin"));
+
+  await exec.exec("ln -s luajit lua", undefined, {
+    cwd: path.join(luaInstallPath, "bin")
+  })
+
+}
+
 async function main() {
   const luaVersion = core.getInput('luaVersion', { required: true })
 
   if (luaVersion == "luajit-openresty") {
     return await install_luajit_openresty()
+  }
+
+  if (luaVersion.startsWith("luajit-")) {
+    const luajitVersion = luaVersion.substr("luajit-".length)
+    return await install_luajit(luajitVersion)
   }
 
   const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `lua-${luaVersion}`)
