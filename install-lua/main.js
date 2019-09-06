@@ -20,13 +20,17 @@ async function main() {
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, luaExtractPath)
 
-  await exec.exec("sudo apt-get install libreadline-dev -qq")
+  await exec.exec("sudo apt-get install libreadline-dev -qq", undefined, {
+    env: {
+      DEBIAN_FRONTEND: "noninteractive"
+    }
+  })
 
-  await exec.exec("make -j linux", {
+  await exec.exec("make -j linux", undefined, {
     cwd: luaExtractPath
   })
 
-  await exec.exec(`make -j INSTALL_TOP="${luaInstallPath}" install`, {
+  await exec.exec(`make -j INSTALL_TOP="${luaInstallPath}" install`, undefined, {
     cwd: luaExtractPath
   })
 }
