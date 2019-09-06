@@ -1,0 +1,13 @@
+name: test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - uses: leafo/gh-actions-lua/install-lua@master
+      with:
+        luaVersion: "5.1.5"
