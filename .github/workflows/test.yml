@@ -21,3 +21,9 @@ jobs:
 
     - name: test it
       run: lua -e 'print("hi from lua")'
+
+    - name: test luarocks
+      run: |
+        .luarocks/bin/luarocks
+        .luarocks/bin/luarocks path
+        .luarocks/bin/luarocks install moonscript
