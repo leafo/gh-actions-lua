@@ -10,12 +10,15 @@ const INSTALL_PREFIX = ".install"
 async function main() {
   const luaVersion = core.getInput('luaVersion', {required: true})
 
+  const luaInstallPath = `${INSTALL_PREFIX}/lua-${luaVersion}`
+
   // await exec.exec("sudo apt-get install libreadline-dev")
-  await io.mkdirP(INSTALL_PREFIX)
 
   const luaSourceTar = await tc.downloadTool(`http://www.lua.org/ftp/lua-${luaVersion}.tar.gz`)
   console.log(`source tar: ${luaSourceTar}`)
-  const luaPath = await tc.extractTar(luaSourceTar, `${INSTALL_PREFIX}/lua-${luaVersion}`)
+
+  await io.mkdirP(luaInstallPath)
+  const luaPath = await tc.extractTar(luaSourceTar, luaInstallPath)
   console.log(`extract path: ${luaPath}`)
 }
 
