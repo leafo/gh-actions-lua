@@ -13,6 +13,13 @@ async function install_luajit_openresty() {
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
   const installPath = path.join(process.cwd(), INSTALL_PREFIX)
 
+  await exec.exec("sudo apt-get install -q git", undefined, {
+    env: {
+      DEBIAN_FRONTEND: "noninteractive",
+      TERM: "linux"
+    }
+  })
+
   await exec.exec("git clone https://github.com/openresty/luajit2.git", undefined, {
     cwd: installPath
   })
