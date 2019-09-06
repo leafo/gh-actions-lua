@@ -33,6 +33,8 @@ async function main() {
   await exec.exec(`make -j INSTALL_TOP="${luaInstallPath}" install`, undefined, {
     cwd: luaExtractPath
   })
+
+  core.addPath(path.join(luaInstallPath, "bin"));
 }
 
 main().catch(err => {
