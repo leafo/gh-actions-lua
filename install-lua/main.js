@@ -10,7 +10,7 @@ const INSTALL_PREFIX = ".install"
 const LUA_PREFIX = ".lua"
 
 async function main() {
-  const luaVersion = core.getInput('luaVersion', {required: true})
+  const luaVersion = core.getInput('luaVersion', { required: true })
 
   const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `lua-${luaVersion}`)
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
@@ -26,14 +26,6 @@ async function main() {
     }
   })
 
-  await exec.exec("pwd", undefined, {
-    cwd: luaExtractPath
-  })
-
-  await exec.exec("ls", undefined, {
-    cwd: luaExtractPath
-  })
-
   await exec.exec("make -j linux", undefined, {
     cwd: luaExtractPath
   })
@@ -47,17 +39,4 @@ main().catch(err => {
   console.error(err)
   process.exitCode = 1
 })
-
-// mkdir -p .install
-// LUA_INSTALL_DIR="$(pwd)/.lua"
-// mkdir -p "$LUA_INSTALL_DIR"
-// cd .install
-// curl http://www.lua.org/ftp/lua-${{ matrix.lua_version }}.tar.gz | tar xz
-// cd lua-${{ matrix.lua_version }}
-// make -j linux
-// make -j INSTALL_TOP="$LUA_INSTALL_DIR" install;
-
-core.warning("this is a warning..HELLO");
-
-
 
