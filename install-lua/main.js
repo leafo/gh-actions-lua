@@ -27,7 +27,12 @@ async function install_luajit_openresty() {
     cwd: path.join(installPath, "luajit2")
   })
 
+
   core.addPath(path.join(luaInstallPath, "bin"));
+
+  await exec.exec("ln -s luajit lua", undefined, {
+    cwd: luaInstallPath
+  })
 }
 
 async function main() {
