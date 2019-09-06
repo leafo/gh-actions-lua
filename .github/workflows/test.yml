@@ -12,9 +12,9 @@ jobs:
       with:
         luaVersion: "5.1.5"
 
-    # - uses: leafo/gh-actions-lua/install-luarocks@master
-    #   with:
-    #     luaRocksVersion: "3.2.0"
+    - uses: leafo/gh-actions-lua/install-luarocks@master
+      with:
+        luaRocksVersion: "3.2.0"
 
     - name: show it
       run: find .
