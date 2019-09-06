@@ -19,7 +19,10 @@ async function main() {
   console.log(`extract path: ${luaPath}`)
 }
 
-main().catch((err) => { throw err })
+main().catch(err => {
+  console.error(err)
+  process.exitCode = 1
+})
 
 // mkdir -p .install
 // LUA_INSTALL_DIR="$(pwd)/.lua"
