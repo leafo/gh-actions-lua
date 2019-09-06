@@ -21,7 +21,7 @@ async function main() {
 
   await exec.exec("sudo apt-get install libreadline-dev -qq", undefined, {
     env: {
-      DEBIAN_FRONTEND: "noninteractive"
+      DEBIAN_FRONTEND: "noninteractive",
       TERM: "linux"
     }
   })
