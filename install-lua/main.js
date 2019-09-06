@@ -19,7 +19,7 @@ async function main() {
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
 
-  await exec.exec("sudo apt-get install libreadline-dev -qq", undefined, {
+  await exec.exec("sudo apt-get -qq install libreadline-dev", undefined, {
     env: {
       DEBIAN_FRONTEND: "noninteractive",
       TERM: "linux"
