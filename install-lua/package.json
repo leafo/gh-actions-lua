@@ -1,0 +1,14 @@
+{
+  "name": "install-lua",
+  "version": "1.0.0",
+  "description": "Build and install Lua",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "leaf corcoran <leafot@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.1.0"
+  }
+}
