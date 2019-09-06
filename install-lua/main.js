@@ -9,7 +9,7 @@ const INSTALL_PREFIX = ".install"
 
 const luaVersion = core.getInput('luaVersion', {required: true})
 
-await exec.exec("sudo apt-get install libreadline-dev")
+// await exec.exec("sudo apt-get install libreadline-dev")
 await io.mkdirP(INSTALL_PREFIX)
 
 const luaSourceTar = await tc.downloadTool(`http://www.lua.org/ftp/lua-${luaVersion}.tar.gz`)
