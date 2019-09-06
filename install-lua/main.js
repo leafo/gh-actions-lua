@@ -15,7 +15,7 @@ async function main() {
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
 
   const luaSourceTar = await tc.downloadTool(`http://www.lua.org/ftp/lua-${luaVersion}.tar.gz`)
-  await io.mkdirP(luaExtractPath)
+  await io.mkdirP(INSTALL_PREFIX)
   const luaExtractPath = await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
 
   await exec.exec("sudo apt-get install libreadline-dev -qq", undefined, {
