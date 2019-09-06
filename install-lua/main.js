@@ -1,25 +1,31 @@
 
 const core = require("@actions/core")
 const exec = require("@actions/exec")
-const io = require('@actions/io')
-const tc = require('@actions/tool-cache')
+const io = require("@actions/io")
+const tc = require("@actions/tool-cache")
 
+const path = require("path")
 
 const INSTALL_PREFIX = ".install"
+const LUA_PREFIX = ".lua"
 
 async function main() {
   const luaVersion = core.getInput('luaVersion', {required: true})
 
-  const luaInstallPath = `${INSTALL_PREFIX}/lua-${luaVersion}`
+  const luaExtractPath = path.join(INSTALL_PREFIX, `lua-${luaVersion}`)
+  const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
 
-  // await exec.exec("sudo apt-get install libreadline-dev")
 
   const luaSourceTar = await tc.downloadTool(`http://www.lua.org/ftp/lua-${luaVersion}.tar.gz`)
-  console.log(`source tar: ${luaSourceTar}`)
+  await io.mkdirP(luaExtractPath)
+  await tc.extractTar(luaSourceTar, luaExtractPath)
 
-  await io.mkdirP(luaInstallPath)
-  const luaPath = await tc.extractTar(luaSourceTar, luaInstallPath)
-  console.log(`extract path: ${luaPath}`)
+  process.chdir(luaExtractPath)
+
+
+  await exec.exec("sudo apt-get install libreadline-dev")
+  await exec.exec("make -j linux")
+  await exec.exec(`make -j INSTALL_TOP="${luaInstallPath}" install`)
 }
 
 main().catch(err => {

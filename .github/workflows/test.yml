@@ -11,3 +11,7 @@ jobs:
     - uses: leafo/gh-actions-lua/install-lua@master
       with:
         luaVersion: "5.1.5"
+
+    - name: show it
+      run: find .
+
