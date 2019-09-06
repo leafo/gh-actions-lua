@@ -31,7 +31,7 @@ async function install_luajit_openresty() {
   core.addPath(path.join(luaInstallPath, "bin"));
 
   await exec.exec("ln -s luajit lua", undefined, {
-    cwd: luaInstallPath
+    cwd: path.join(luaInstallPath, "bin")
   })
 }
 
