@@ -9,8 +9,31 @@ const path = require("path")
 const INSTALL_PREFIX = ".install"
 const LUA_PREFIX = ".lua"
 
+async function install_luajit_openresty() {
+  const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
+  const installPath = path.join(process.cwd(), INSTALL_PREFIX)
+
+  await exec.exec("git clone https://github.com/openresty/luajit2.git", undefined, {
+    cwd: installPath
+  })
+
+  await exec.exec("make -j", undefined, {
+    cwd: path.join(installPath, "luajit2")
+  })
+
+  await exec.exec(`make -j install PREFIX="${luaInstallPath}"`, undefined, {
+    cwd: path.join(installPath, "luajit2")
+  })
+
+  core.addPath(path.join(luaInstallPath, "bin"));
+}
+
 async function main() {
   const luaVersion = core.getInput('luaVersion', { required: true })
+
+  if (luaVersion == "luajit-openresty") {
+    return await install_luajit_openresty()
+  }
 
   const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `lua-${luaVersion}`)
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)

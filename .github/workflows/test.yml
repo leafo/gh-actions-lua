@@ -4,17 +4,19 @@ on: [push]
 
 jobs:
   test:
+    strategy:
+      matrix:
+        luaVersion: ["5.1.5", "luajit-openresty", "420"]
+
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@master
     - uses: leafo/gh-actions-lua/install-lua@master
       with:
-        luaVersion: "5.1.5"
+        luaVersion: ${{ matrix.luaVersion }}
 
     - uses: leafo/gh-actions-lua/install-luarocks@master
-      with:
-        luaRocksVersion: "3.2.0"
 
     - name: show it
       run: find .
