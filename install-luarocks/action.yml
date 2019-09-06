@@ -1,5 +1,5 @@
 
-name: "Build and install LuaRocks"
+name: "LuaRocks"
 description: "This will download, build, and install lua to the .lua directory in the working directory"
 
 branding:
