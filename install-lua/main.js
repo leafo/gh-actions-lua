@@ -22,8 +22,8 @@ async function main() {
 
   process.chdir(luaExtractPath)
 
-
   await exec.exec("sudo apt-get install libreadline-dev")
+  console.log("Running from: " + process.cwd())
   await exec.exec("make -j linux")
   await exec.exec(`make -j INSTALL_TOP="${luaInstallPath}" install`)
 }
