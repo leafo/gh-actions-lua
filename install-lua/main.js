@@ -10,10 +10,10 @@ const INSTALL_PREFIX = ".install"
 const LUA_PREFIX = ".lua"
 
 const VERSION_ALIASES = {
-  "5.1": "5.1.5"
-  "5.2": "5.2.4"
-  "5.3": "5.3.5"
-  "luajit": "luajit-2.1.0-beta3"
+  "5.1": "5.1.5",
+  "5.2": "5.2.4",
+  "5.3": "5.3.5",
+  "luajit": "luajit-2.1.0-beta3",
 }
 
 async function install_luajit_openresty() {
