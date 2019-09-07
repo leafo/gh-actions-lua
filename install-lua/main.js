@@ -9,6 +9,13 @@ const path = require("path")
 const INSTALL_PREFIX = ".install"
 const LUA_PREFIX = ".lua"
 
+const VERSION_ALIASES = {
+  "5.1": "5.1.5"
+  "5.2": "5.2.4"
+  "5.3": "5.3.5"
+  "luajit": "luajit-2.1.0-beta3"
+}
+
 async function install_luajit_openresty() {
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
   const installPath = path.join(process.cwd(), INSTALL_PREFIX)
@@ -61,6 +68,10 @@ async function install_luajit(luajitVersion) {
 
 async function main() {
   const luaVersion = core.getInput('luaVersion', { required: true })
+
+  if (VERSION_ALIASES[luaVersion]) {
+    luaVersion = VERSION_ALIASES[luaVersion]
+  }
 
   if (luaVersion == "luajit-openresty") {
     return await install_luajit_openresty()
