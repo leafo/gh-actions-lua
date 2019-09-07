@@ -64,7 +64,7 @@ async function main() {
 
   let luaPath = ""
 
-  await exec.exec("./luarocks path --lr-path", undefined, {
+  await exec.exec("luarocks path --lr-path", undefined, {
     listeners: {
       stdout: (data) => {
         luaPath += data.toString()
@@ -76,7 +76,7 @@ async function main() {
 
   let luaCpath = ""
 
-  await exec.exec("./luarocks path --lr-cpath", undefined, {
+  await exec.exec("luarocks path --lr-cpath", undefined, {
     listeners: {
       stdout: (data) => {
         luaCpath += data.toString()
