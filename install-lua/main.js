@@ -67,7 +67,7 @@ async function install_luajit(luajitVersion) {
 }
 
 async function main() {
-  const luaVersion = core.getInput('luaVersion', { required: true })
+  let luaVersion = core.getInput('luaVersion', { required: true })
 
   if (VERSION_ALIASES[luaVersion]) {
     luaVersion = VERSION_ALIASES[luaVersion]
