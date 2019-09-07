@@ -1,9 +1,8 @@
-# Github Actions for Lua
+# Github Action for Lua
 
 ### `leafo/gh-actions-lua`
 
 [![Actions Status](https://github.com/leafo/gh-actions-lua/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-lua/actions)
-
 
 Builds and installs Lua into the `.lua/` directory in the working directory.
 Adds the `.lua/bin` to the `PATH` environment variable so `lua` can be called
