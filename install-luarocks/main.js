@@ -59,6 +59,7 @@ async function main() {
   })
 
   if (lrPath != "") {
+    core.warning("Adding to path: " + lrPath)
     core.addPath(lrPath);
   }
 }

@@ -27,6 +27,7 @@ jobs:
 
     - name: test luarocks
       run: |
+        echo $PATH
         luarocks
         luarocks path
         luarocks install moonscript
