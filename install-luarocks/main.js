@@ -50,7 +50,7 @@ async function main() {
   let lrPath = ""
 
   await exec.exec("luarocks path --lr-bin", undefined, {
-    cwd: luaRocksExtractPath,
+    cwd: luaRocksInstallPath,
     listeners: {
       stdout: (data) => {
         lrPath += data.toString()
