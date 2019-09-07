@@ -10,7 +10,7 @@ inputs:
   luaVersion:
     description: "The version of Lua to install, must be available on https://www.lua.org/ftp/"
     required: false
-    default: "5.1"
+    default: "5.3"
 
 
 runs:
