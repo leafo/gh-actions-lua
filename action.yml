@@ -1,6 +1,6 @@
 
-name: "Lua"
-description: "This will download, build, and install lua to the .lua directory in the working directory"
+name: "Install Lua"
+description: "This will download, build, and install Lua to the .lua directory in the working directory"
 
 branding:
   icon: 'moon'
