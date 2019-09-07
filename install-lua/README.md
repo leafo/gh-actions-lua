@@ -35,7 +35,7 @@ Install specific version of LuaJIT:
 
 ### `luaVersion`
 
-**Default**: `"5.3.5"`
+**Default**: `"5.3"`
 
 Specifies the version of Lua to install. The version name instructs the action
 where to download the source from.
@@ -57,6 +57,6 @@ The version specifies where the source is downloaded from:
 
 **Version aliases**
 
-You can use shorthand `5.1`, `5.2`, `5.3` version aliases to point to the
+You can use shorthand `5.1`, `5.2`, `5.3`, `luajit` version aliases to point to the
 latest (or recent) version of Lua for that version.
 
