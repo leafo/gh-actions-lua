@@ -17,17 +17,20 @@ jobs:
       with:
         luaVersion: ${{ matrix.luaVersion }}
 
-    - name: show it
-      run: find . | grep -v '.install'
+    # - name: show it
+    #   run: find . | grep -v '.install'
 
     - uses: leafo/gh-actions-lua/install-luarocks@master
 
-    - name: test it
+    - name: test lua
       run: lua -e 'print("hi from lua")'
 
     - name: test luarocks
       run: |
         echo $PATH
+        env | grep LUA
         luarocks
         luarocks path
         luarocks install moonscript
+        lua -e 'require("moon").p({1,2,3})'
+

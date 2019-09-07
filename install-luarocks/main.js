@@ -59,8 +59,39 @@ async function main() {
   })
 
   if (lrPath != "") {
-    core.warning("Adding to path: " + lrPath.trim())
     core.addPath(lrPath.trim());
+  }
+
+  let luaPath = ""
+
+  await exec.exec("./luarocks path --lr-path", undefined, {
+    listeners: {
+      stdout: (data) => {
+        luaPath += data.toString()
+      }
+    }
+  })
+
+  luaPath = luaPath.trim()
+
+  let luaCpath = ""
+
+  await exec.exec("./luarocks path --lr-cpath", undefined, {
+    listeners: {
+      stdout: (data) => {
+        luaCpath += data.toString()
+      }
+    }
+  })
+
+  luaCpath = luaCpath.trim()
+
+  if (luaPath != "") {
+    core.exportVariable("LUA_PATH", luaPath)
+  }
+
+  if (luaCpath != "") {
+    core.exportVariable("LUA_CPATH", luaCpath)
   }
 }
 
