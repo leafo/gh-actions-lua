@@ -1,73 +1,16 @@
 # Github Actions for Lua
 
-### `leafo/gh-actions-lua`
-
 [![Actions Status](https://github.com/leafo/gh-actions-lua/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-lua/actions)
 
 
-Builds and installs Lua into the `.lua/` directory in the working directory.
-Adds the `.lua/bin` to the `PATH` environment variable so `lua` can be called
-directly in workflows.
+These are a collection of GitHub actions for working with Lua and LuaRocks for CI/CD.
 
-Other Lua GitHub actions:
-
-* [`leafo/gh-actions-luarocks`](https://github.com/leafo/gh-actions-luarocks)
+* [`leafo/gh-actions-lua/install-lua`](https://github.com/leafo/gh-actions-lua/tree/master/install-lua)
+  * inputs: `luaVersion`
+* [`leafo/gh-actions-lua/install-luarocks`](https://github.com/leafo/gh-actions-lua/tree/master/install-luarocks)
   * inputs: `luarocksVersion`
 
-## Usage
-
-Install Lua: (Will typically default to the latest release, 5.3.5 as of this readme)
-
-```yaml
-- uses: leafo/gh-actions-lua/install-lua@master
-```
-
-Install specific version of Lua:
-
-```yaml
-- uses: leafo/gh-actions-lua/install-lua@master
-  with:
-    luaVersion: "5.1.5"
-```
-
-Install specific version of LuaJIT:
-
-```yaml
-- uses: leafo/gh-actions-lua/install-lua@master
-  with:
-    luaVersion: "luajit-2.1.0-beta3"
-```
-
-## Inputs
-
-### `luaVersion`
-
-**Default**: `"5.3"`
-
-Specifies the version of Lua to install. The version name instructs the action
-where to download the source from.
-
-Examples of versions:
-
-* `"5.1.5"`
-* `"5.2.4"`
-* `"5.3.5"`
-* `"luajit-2.0.5"`
-* `"luajit-2.1.0-beta3"`
-* `"luajit-openresty"`
-
-The version specifies where the source is downloaded from:
-
-* `luajit-openresty` — from https://github.com/openresty/luajit2
-* Anything starting with `luajit-` — from http://luajit.org/download.html
-* Anything else — from https://www.lua.org/ftp/
-
-**Version aliases**
-
-You can use shorthand `5.1`, `5.2`, `5.3`, `luajit` version aliases to point to the
-latest (or recent) version of Lua for that version.
-
-## Full Example
+## Example
 
 This example is for running tests on a Lua module that uses LuaRocks for
 dependencies and [busted](https://olivinelabs.com/busted/) for a test suite.
@@ -129,3 +72,5 @@ jobs:
 
     # ...
 ```
+
+
