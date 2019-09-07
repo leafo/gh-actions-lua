@@ -27,6 +27,6 @@ jobs:
 
     - name: test luarocks
       run: |
-        .luarocks/bin/luarocks
-        .luarocks/bin/luarocks path
-        .luarocks/bin/luarocks install moonscript
+        luarocks
+        luarocks path
+        luarocks install moonscript

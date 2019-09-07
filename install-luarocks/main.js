@@ -45,6 +45,22 @@ async function main() {
   await exec.exec("make install", undefined, {
     cwd: luaRocksExtractPath
   })
+
+  // Update environment to use luarocks directly
+  let lrPath = ""
+
+  await exec.exec("luarocks path --lr-bin", undefined, {
+    cwd: luaRocksExtractPath,
+    listeners: {
+      stdout: (data) => {
+        lrPath += data.toString()
+      }
+    }
+  })
+
+  if (lrPath != "") {
+    core.addPath(lrPath);
+  }
 }
 
 main().catch(err => {
