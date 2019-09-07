@@ -49,6 +49,9 @@ async function main() {
   // Update environment to use luarocks directly
   let lrPath = ""
 
+  core.warning(path.join(luaRocksInstallPath, "bin"))
+  await exec.exec("find", [path.join(luaRocksInstallPath, "bin")])
+
   await exec.exec("luarocks path --lr-bin", undefined, {
     cwd: path.join(luaRocksInstallPath, "bin"),
     listeners: {
