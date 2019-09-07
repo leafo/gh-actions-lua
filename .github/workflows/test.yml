@@ -17,10 +17,10 @@ jobs:
       with:
         luaVersion: ${{ matrix.luaVersion }}
 
-    - uses: leafo/gh-actions-lua/install-luarocks@master
-
     - name: show it
-      run: find .
+      run: find . | grep -v '.install'
+
+    - uses: leafo/gh-actions-lua/install-luarocks@master
 
     - name: test it
       run: lua -e 'print("hi from lua")'
