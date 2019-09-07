@@ -53,7 +53,7 @@ async function install_luajit(luajitVersion) {
 
   core.addPath(path.join(luaInstallPath, "bin"));
 
-  await exec.exec("ln -s luajit lua", undefined, {
+  await exec.exec(`ln -s luajit-${luajitVersion} lua`, undefined, {
     cwd: path.join(luaInstallPath, "bin")
   })
 
