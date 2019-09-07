@@ -87,11 +87,11 @@ async function main() {
   luaCpath = luaCpath.trim()
 
   if (luaPath != "") {
-    core.exportVariable("LUA_PATH", luaPath)
+    core.exportVariable("LUA_PATH", ";;" + luaPath)
   }
 
   if (luaCpath != "") {
-    core.exportVariable("LUA_CPATH", luaCpath)
+    core.exportVariable("LUA_CPATH", ";;" + luaCpath)
   }
 }
 
