@@ -1,6 +1,6 @@
 
 name: "Install Lua"
-description: "This will download, build, and install Lua to the .lua directory in the working directory"
+description: "Download, build, and install Lua or LuaJIT for use with scripts, tests and more"
 
 branding:
   icon: 'moon'
@@ -8,7 +8,7 @@ branding:
 
 inputs:
   luaVersion:
-    description: "The version of Lua to install, must be available on https://www.lua.org/ftp/"
+    description: "The version of Lua to install, must be available on https://www.lua.org/ftp/ or http://luajit.org/download.html"
     required: false
     default: "5.3"
 
