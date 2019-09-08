@@ -1,5 +1,5 @@
 
-name: "Install Lua"
+name: "Install Lua/LuaJIT"
 description: "Download, build, and install Lua or LuaJIT for use with scripts, tests and more"
 
 branding:

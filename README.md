@@ -1,4 +1,4 @@
-# Github Action for Lua
+# Github Action for Lua and LuaJIT
 
 ### `leafo/gh-actions-lua`
 
