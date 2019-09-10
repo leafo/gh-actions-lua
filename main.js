@@ -46,7 +46,7 @@ async function install_luajit(luajitVersion) {
   const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `LuaJIT-${luajitVersion}`)
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
 
-  const luaSourceTar = await tc.downloadTool(`http://luajit.org/download/LuaJIT-${luajitVersion}.tar.gz`)
+  const luaSourceTar = await tc.downloadTool(`https://luajit.org/download/LuaJIT-${luajitVersion}.tar.gz`)
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
 
@@ -85,7 +85,7 @@ async function main() {
   const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `lua-${luaVersion}`)
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
 
-  const luaSourceTar = await tc.downloadTool(`http://www.lua.org/ftp/lua-${luaVersion}.tar.gz`)
+  const luaSourceTar = await tc.downloadTool(`https://www.lua.org/ftp/lua-${luaVersion}.tar.gz`)
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
 
