@@ -29,6 +29,6 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ${{ matrix.luaVersion }}.tar.gz
-        asset_name: ${{ matrix.luaVersion }}
+        asset_name: ${{ matrix.luaVersion }}.tar.gz
         tag: ${{ github.ref }}
         overwrite: true
