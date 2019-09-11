@@ -1,0 +1,34 @@
+name: publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        luaVersion: ["5.1.5", "5.2.4", "5.3.5", "luajit-2.0.5", "luajit-2.1.0-beta3", "luajit-openresty", "5.1"]
+
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - uses: leafo/gh-actions-lua@master
+      with:
+        luaVersion: ${{ matrix.luaVersion }}
+
+    - name: bundle binaries
+      run: tar czf '${{matrix.luaVersion}}.tar.gz' .lua
+
+    - name: upload to release
+      uses: svenstaro/upload-release-action@v1-release
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ matrix.luaVersion }}.tar.gz
+        asset_name: ${{ matrix.luaVersion }}
+        tag: ${{ github.ref }}
+        overwrite: true
