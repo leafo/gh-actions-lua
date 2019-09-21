@@ -98,8 +98,8 @@ async function main() {
   })
 
   const compileFlagsArray = [
-    "-j"
-    "linux"
+    "-j",
+    "linux",
   ]
 
   if (luaCompileFlags) {
