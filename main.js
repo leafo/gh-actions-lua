@@ -68,6 +68,7 @@ async function install_luajit(luajitVersion) {
 
 async function main() {
   let luaVersion = core.getInput('luaVersion', { required: true })
+  let luaCompileFlags = core.getInput('luaCompileFlags')
 
   if (VERSION_ALIASES[luaVersion]) {
     luaVersion = VERSION_ALIASES[luaVersion]
@@ -96,7 +97,16 @@ async function main() {
     }
   })
 
-  await exec.exec("make -j linux", undefined, {
+  const compileFlagsArray = [
+    "-j"
+    "linux"
+  ]
+
+  if (luaCompileFlags) {
+    compileFlagsArray.push(luaCompileFlags)
+  }
+
+  await exec.exec("make", compileFlagsArray, {
     cwd: luaExtractPath
   })
 

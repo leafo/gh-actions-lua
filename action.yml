@@ -11,7 +11,9 @@ inputs:
     description: "The version of Lua to install, must be available on https://www.lua.org/ftp/ or http://luajit.org/download.html"
     required: false
     default: "5.3"
-
+  luaCompileFlags:
+    description: "Command line flags passed to make when building Lua"
+    required: false
 
 runs:
   using: 'node12'
