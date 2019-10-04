@@ -90,7 +90,7 @@ async function main() {
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
 
-  await exec.exec("sudo apt-get install -q libreadline-dev", undefined, {
+  await exec.exec("sudo apt-get install -q libreadline-dev libncurses-dev", undefined, {
     env: {
       DEBIAN_FRONTEND: "noninteractive",
       TERM: "linux"
