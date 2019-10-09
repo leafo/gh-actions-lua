@@ -13,6 +13,9 @@ Other Lua GitHub actions:
 * [`leafo/gh-actions-luarocks`](https://github.com/leafo/gh-actions-luarocks)
   * inputs: `luarocksVersion`
 
+
+**Is your build failing when installing Lua?** GitHub Action's Ubuntu base image changed default packages, please update to v5 or later
+
 ## Usage
 
 Install Lua: (Will typically default to the latest release, 5.3.5 as of this readme)
