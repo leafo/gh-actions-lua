@@ -5,7 +5,7 @@
 [![Actions Status](https://github.com/leafo/gh-actions-lua/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-lua/actions)
 
 
-** Update July 1 2020** Lua 5.4 works with no chagnes, specify Lua 5.4.0 as the version. A 5.4 alias has been added in the most recent tagged version
+**Update July 1 2020** Lua 5.4 works with no chagnes, specify Lua 5.4.0 as the version. A 5.4 alias has been added in the most recent tagged version
 
 Builds and installs Lua into the `.lua/` directory in the working directory.
 Adds the `.lua/bin` to the `PATH` environment variable so `lua` can be called
