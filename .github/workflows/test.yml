@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.machineTag }}
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
     - uses: leafo/gh-actions-lua@master
       with:
         luaVersion: ${{ matrix.luaVersion }}
