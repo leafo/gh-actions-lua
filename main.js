@@ -27,7 +27,8 @@ async function install_luajit_openresty() {
     cwd: installPath
   })
 
-  await exec.exec("make -j", undefined, {
+  const macOSDeploymentTarget = process.platform === 'darwin' ? ' MACOSX_DEPLOYMENT_TARGET=10.15' : ''
+  await exec.exec("make -j" + macOSDeploymentTarget, undefined, {
     cwd: path.join(installPath, "luajit2")
   })
 
@@ -51,7 +52,8 @@ async function install_luajit(luajitVersion) {
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
 
-  await exec.exec("make -j", undefined, {
+  const macOSDeploymentTarget = process.platform === 'darwin' ? ' MACOSX_DEPLOYMENT_TARGET=10.15' : ''
+  await exec.exec("make -j" + macOSDeploymentTarget, undefined, {
     cwd: luaExtractPath
   })
 
@@ -91,16 +93,21 @@ async function main() {
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
 
-  await exec.exec("sudo apt-get install -q libreadline-dev libncurses-dev", undefined, {
-    env: {
-      DEBIAN_FRONTEND: "noninteractive",
-      TERM: "linux"
-    }
-  })
+  if (process.platform === 'darwin') {
+    await exec.exec("brew install readline ncurses")
+  } else {
+    await exec.exec("sudo apt-get install -q libreadline-dev libncurses-dev", undefined, {
+      env: {
+        DEBIAN_FRONTEND: "noninteractive",
+        TERM: "linux"
+      }
+    })
+  }
 
+  const makefilePlatform = process.platform === "darwin" ? "macosx" : "linux"
   const compileFlagsArray = [
     "-j",
-    "linux",
+    makefilePlatform,
   ]
 
   if (luaCompileFlags) {
