@@ -5,7 +5,7 @@
 [![Actions Status](https://github.com/leafo/gh-actions-lua/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-lua/actions)
 
 
-**Update July 1 2020** Lua 5.4 works with no chagnes, specify Lua 5.4.0 as the version. A 5.4 alias has been added in the most recent tagged version. The default version has been updated to 5.4 in v6
+**Update July 1 2020** A Lua 5.4 alias has been added in the most recent tagged version. The default version has been updated to 5.4 in v6.
 
 Builds and installs Lua into the `.lua/` directory in the working directory.
 Adds the `.lua/bin` to the `PATH` environment variable so `lua` can be called
@@ -21,7 +21,7 @@ Other Lua GitHub actions:
 
 ## Usage
 
-Install Lua: (Will typically default to the latest release, 5.4.0 as of this readme)
+Install Lua: (Will typically default to the latest release, 5.4.1 as of this readme)
 
 ```yaml
 - uses: leafo/gh-actions-lua@v7
@@ -57,7 +57,7 @@ Examples of versions:
 * `"5.1.5"`
 * `"5.2.4"`
 * `"5.3.5"`
-* `"5.4.0"`
+* `"5.4.1"`
 * `"luajit-2.0.5"`
 * `"luajit-2.1.0-beta3"`
 * `"luajit-openresty"`
