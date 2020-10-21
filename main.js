@@ -12,7 +12,7 @@ const LUA_PREFIX = ".lua"
 const VERSION_ALIASES = {
   "5.1": "5.1.5",
   "5.2": "5.2.4",
-  "5.3": "5.3.5",
+  "5.3": "5.3.6",
   "5.4": "5.4.1",
   "luajit": "luajit-2.1.0-beta3",
 }
