@@ -94,7 +94,7 @@ jobs:
       with:
         luaVersion: "5.1.5"
 
-    - uses: leafo/gh-actions-luarocks@v3
+    - uses: leafo/gh-actions-luarocks@v4.0.0
 
     - name: build
       run: |
