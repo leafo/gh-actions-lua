@@ -4,7 +4,8 @@
 
 [![Actions Status](https://github.com/leafo/gh-actions-lua/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-lua/actions)
 
-**Update July 1 2020** A Lua 5.4 alias has been added in the most recent tagged version. The default version has been updated to 5.4 in v6.
+**Update  Nov 18, 2020**: You must use version 8.0.0 or greater as GitHub has
+deprecated older versions of the actions core libraries.
 
 Builds and installs Lua into the `.lua/` directory in the working directory.
 Adds the `.lua/bin` to the `PATH` environment variable so `lua` can be called
@@ -15,8 +16,6 @@ Other Lua GitHub actions:
 * [`leafo/gh-actions-luarocks`](https://github.com/leafo/gh-actions-luarocks)
   * inputs: `luarocksVersion`
 
-
-**Is your build failing when installing Lua?** GitHub Action's Ubuntu base image changed default packages, please update to v5 or later
 
 ## Usage
 
