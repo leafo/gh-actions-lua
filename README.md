@@ -4,7 +4,6 @@
 
 [![Actions Status](https://github.com/leafo/gh-actions-lua/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-lua/actions)
 
-
 **Update July 1 2020** A Lua 5.4 alias has been added in the most recent tagged version. The default version has been updated to 5.4 in v6.
 
 Builds and installs Lua into the `.lua/` directory in the working directory.
@@ -24,13 +23,13 @@ Other Lua GitHub actions:
 Install Lua: (Will typically default to the latest release, 5.4.1 as of this readme)
 
 ```yaml
-- uses: leafo/gh-actions-lua@v7
+- uses: leafo/gh-actions-lua@v8.0.0
 ```
 
 Install specific version of Lua:
 
 ```yaml
-- uses: leafo/gh-actions-lua@v7
+- uses: leafo/gh-actions-lua@v8.0.0
   with:
     luaVersion: "5.1.5"
 ```
@@ -38,7 +37,7 @@ Install specific version of Lua:
 Install specific version of LuaJIT:
 
 ```yaml
-- uses: leafo/gh-actions-lua@v7
+- uses: leafo/gh-actions-lua@v8.0.0
   with:
     luaVersion: "luajit-2.1.0-beta3"
 ```
@@ -92,7 +91,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - uses: leafo/gh-actions-lua@v7
+    - uses: leafo/gh-actions-lua@v8.0.0
       with:
         luaVersion: "5.1.5"
 
@@ -129,7 +128,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - uses: leafo/gh-actions-lua@v5
+    - uses: leafo/gh-actions-lua@v8.0.0
       with:
         luaVersion: ${{ matrix.luaVersion }}
 
