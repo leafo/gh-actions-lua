@@ -19,7 +19,7 @@ Other Lua GitHub actions:
 
 ## Usage
 
-Install Lua: (Will typically default to the latest release, 5.4.1 as of this readme)
+Install Lua: (Will typically default to the latest release, 5.4.2 as of this readme)
 
 ```yaml
 - uses: leafo/gh-actions-lua@v8.0.0
@@ -62,7 +62,7 @@ Examples of versions:
 
 The version specifies where the source is downloaded from:
 
-* `luajit-openresty` — from https://github.com/openresty/luajit2
+* `luajit-openresty` — will allways pull master from  https://github.com/openresty/luajit2
 * Anything starting with `luajit-` — from http://luajit.org/download.html
 * Anything else — from https://www.lua.org/ftp/
 
