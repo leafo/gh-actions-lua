@@ -17,9 +17,12 @@ const VERSION_ALIASES = {
   "luajit": "luajit-2.1.0-beta3",
 }
 
+const isMacOS = () => (process.platform || "").startsWith("darwin")
+
 async function install_luajit_openresty() {
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
   const installPath = path.join(process.cwd(), INSTALL_PREFIX)
+  const luaCompileFlags = core.getInput('luaCompileFlags')
 
   await io.mkdirP(installPath)
 
@@ -27,10 +30,17 @@ async function install_luajit_openresty() {
     cwd: installPath
   })
 
-  const isMacOS = (process.platform || "").startsWith("darwin")
-  const macOSDeploymentTarget = isMacOS ? ' MACOSX_DEPLOYMENT_TARGET=10.15' : ''
+  const compileFlagsArray = [ "-j" ]
 
-  await exec.exec("make -j" + macOSDeploymentTarget, undefined, {
+  if (isMacOS()) {
+    compileFlagsArray.push("MACOSX_DEPLOYMENT_TARGET=10.15")
+  }
+
+  if (luaCompileFlags) {
+    compileFlagsArray.push(luaCompileFlags)
+  }
+
+  await exec.exec("make", compileFlagsArray, {
     cwd: path.join(installPath, "luajit2")
   })
 
@@ -50,14 +60,23 @@ async function install_luajit(luajitVersion) {
   const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `LuaJIT-${luajitVersion}`)
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
 
+  const luaCompileFlags = core.getInput('luaCompileFlags')
+
   const luaSourceTar = await tc.downloadTool(`https://luajit.org/download/LuaJIT-${luajitVersion}.tar.gz`)
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
 
-  const isMacOS = (process.platform || "").startsWith("darwin")
-  const macOSDeploymentTarget = isMacOS ? ' MACOSX_DEPLOYMENT_TARGET=10.15' : ''
+  const compileFlagsArray = [ "-j" ]
 
-  await exec.exec("make -j" + macOSDeploymentTarget, undefined, {
+  if (isMacOS()) {
+    compileFlagsArray.push("MACOSX_DEPLOYMENT_TARGET=10.15")
+  }
+
+  if (luaCompileFlags) {
+    compileFlagsArray.push(luaCompileFlags)
+  }
+
+  await exec.exec("make", compileFlagsArray, {
     cwd: luaExtractPath
   })
 
@@ -97,9 +116,7 @@ async function main() {
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
 
-  const isMacOS = (process.platform || "").startsWith("darwin")
-
-  if (isMacOS) {
+  if (isMacOS()) {
     await exec.exec("brew install readline ncurses")
   } else {
     await exec.exec("sudo apt-get install -q libreadline-dev libncurses-dev", undefined, {
@@ -110,7 +127,7 @@ async function main() {
     })
   }
 
-  const makefilePlatform = isMacOS ? "macosx" : "linux"
+  const makefilePlatform = isMacOS() ? "macosx" : "linux"
   const compileFlagsArray = [
     "-j",
     makefilePlatform,
