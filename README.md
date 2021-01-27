@@ -71,6 +71,23 @@ The version specifies where the source is downloaded from:
 You can use shorthand `5.1`, `5.2`, `5.3`, `5.4`, `luajit` version aliases to point to the
 latest (or recent) version of Lua for that version.
 
+### `luaCompileFlags`
+
+**Default**: `""`
+
+Additional flags to pass to `make` when building Lua.
+
+Example value:
+
+```yaml
+- uses: leafo/gh-actions-lua@master
+  with:
+    luaVersion: 5.3
+    luaCompileFlags: LUA_CFLAGS="-DLUA_INT_TYPE=LUA_INT_INT"
+```
+
+> Note that compile flags may work differently across Lua and LuaJIT.
+
 ## Full Example
 
 This example is for running tests on a Lua module that uses LuaRocks for
