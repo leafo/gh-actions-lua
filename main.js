@@ -3,6 +3,7 @@ const core = require("@actions/core")
 const exec = require("@actions/exec")
 const io = require("@actions/io")
 const tc = require("@actions/tool-cache")
+const fsp = require("fs").promises
 
 const path = require("path")
 
@@ -145,7 +146,18 @@ async function main() {
 
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
 
-  await install(luaInstallPath, luaVersion)
+  let cacheDir = tc.find('lua', luaVersion)
+  if (!cacheDir) {
+    await install(luaInstallPath, luaVersion)
+    cacheDir = await tc.cacheDir(luaInstallPath, 'lua', luaVersion)
+  }
+
+  // If .lua doesn't exist, symlink it to the cache dir
+  try {
+    await fsp.access(luaInstallPath)
+  } catch (ex) {
+    await fsp.symlink(cacheDir, luaInstallPath)
+  }
 
   core.addPath(path.join(luaInstallPath, "bin"))
 }
