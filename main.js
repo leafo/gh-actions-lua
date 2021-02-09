@@ -3,6 +3,7 @@ const core = require("@actions/core")
 const exec = require("@actions/exec")
 const io = require("@actions/io")
 const tc = require("@actions/tool-cache")
+const ch = require("@actions/cache")
 const fsp = require("fs").promises
 
 const path = require("path")
@@ -136,6 +137,9 @@ async function install(luaInstallPath, luaVersion) {
   return await install_plain_lua(luaInstallPath, luaVersion)
 }
 
+const makeCacheKey = luaVersion=> `setup-lua-${luaVersion}-${process.platform}-${process.arch}`
+const exists = (filename, mode) => fsp.access(filename, mode).then(() => true, () => false)
+
 async function main() {
   let luaVersion = core.getInput('luaVersion', { required: true })
   let luaCompileFlags = core.getInput('luaCompileFlags')
@@ -146,17 +150,24 @@ async function main() {
 
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
 
-  let cacheDir = tc.find('lua', luaVersion)
-  if (!cacheDir) {
-    await install(luaInstallPath, luaVersion)
-    cacheDir = await tc.cacheDir(luaInstallPath, 'lua', luaVersion)
+  // The tool cache is mostly useful on self-hosted runners. It doesn't persist across jobs in Github's runners
+  let toolCacheDir = tc.find('lua', luaVersion)
+
+  if (!toolCacheDir) {
+    const cacheKey = makeCacheKey(luaVersion)
+    await ch.restoreCache([luaInstallPath], cacheKey) // @actions/cache does persist across jobs
+
+    if (!(await exists(luaInstallPath))) {
+      await install(luaInstallPath, luaVersion)
+      await ch.saveCache([luaInstallPath], cacheKey)
+    }
+
+    toolCacheDir = await tc.cacheDir(luaInstallPath, 'lua', luaVersion)
   }
 
-  // If .lua doesn't exist, symlink it to the cache dir
-  try {
-    await fsp.access(luaInstallPath)
-  } catch (ex) {
-    await fsp.symlink(cacheDir, luaInstallPath)
+  // If .lua doesn't exist, symlink it to the tool cache dir
+  if (toolCacheDir && !(await exists(luaInstallPath))) {
+    await fsp.symlink(toolCacheDir, luaInstallPath);
   }
 
   core.addPath(path.join(luaInstallPath, "bin"))
