@@ -19,8 +19,7 @@ const VERSION_ALIASES = {
 
 const isMacOS = () => (process.platform || "").startsWith("darwin")
 
-async function install_luajit_openresty() {
-  const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
+async function install_luajit_openresty(luaInstallPath) {
   const installPath = path.join(process.cwd(), INSTALL_PREFIX)
   const luaCompileFlags = core.getInput('luaCompileFlags')
 
@@ -48,17 +47,13 @@ async function install_luajit_openresty() {
     cwd: path.join(installPath, "luajit2")
   })
 
-
-  core.addPath(path.join(luaInstallPath, "bin"));
-
   await exec.exec("ln -s luajit lua", undefined, {
     cwd: path.join(luaInstallPath, "bin")
   })
 }
 
-async function install_luajit(luajitVersion) {
+async function install_luajit(luaInstallPath, luajitVersion) {
   const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `LuaJIT-${luajitVersion}`)
-  const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
 
   const luaCompileFlags = core.getInput('luaCompileFlags')
 
@@ -84,33 +79,14 @@ async function install_luajit(luajitVersion) {
     cwd: luaExtractPath
   })
 
-  core.addPath(path.join(luaInstallPath, "bin"));
-
   await exec.exec(`ln -s luajit-${luajitVersion} lua`, undefined, {
     cwd: path.join(luaInstallPath, "bin")
   })
-
 }
 
-async function main() {
-  let luaVersion = core.getInput('luaVersion', { required: true })
-  let luaCompileFlags = core.getInput('luaCompileFlags')
-
-  if (VERSION_ALIASES[luaVersion]) {
-    luaVersion = VERSION_ALIASES[luaVersion]
-  }
-
-  if (luaVersion == "luajit-openresty") {
-    return await install_luajit_openresty()
-  }
-
-  if (luaVersion.startsWith("luajit-")) {
-    const luajitVersion = luaVersion.substr("luajit-".length)
-    return await install_luajit(luajitVersion)
-  }
-
+async function install_plain_lua(luaInstallPath, luaVersion) {
   const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `lua-${luaVersion}`)
-  const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
+  const luaCompileFlags = core.getInput('luaCompileFlags')
 
   const luaSourceTar = await tc.downloadTool(`https://www.lua.org/ftp/lua-${luaVersion}.tar.gz`)
   await io.mkdirP(luaExtractPath)
@@ -144,8 +120,34 @@ async function main() {
   await exec.exec(`make -j INSTALL_TOP="${luaInstallPath}" install`, undefined, {
     cwd: luaExtractPath
   })
+}
 
-  core.addPath(path.join(luaInstallPath, "bin"));
+async function install(luaInstallPath, luaVersion) {
+  if (luaVersion == "luajit-openresty") {
+    return await install_luajit_openresty(luaInstallPath)
+  }
+
+  if (luaVersion.startsWith("luajit-")) {
+    const luajitVersion = luaVersion.substr("luajit-".length)
+    return await install_luajit(luaInstallPath, luajitVersion)
+  }
+
+  return await install_plain_lua(luaInstallPath, luaVersion)
+}
+
+async function main() {
+  let luaVersion = core.getInput('luaVersion', { required: true })
+  let luaCompileFlags = core.getInput('luaCompileFlags')
+
+  if (VERSION_ALIASES[luaVersion]) {
+    luaVersion = VERSION_ALIASES[luaVersion]
+  }
+
+  const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
+
+  await install(luaInstallPath, luaVersion)
+
+  core.addPath(path.join(luaInstallPath, "bin"))
 }
 
 main().catch(err => {
