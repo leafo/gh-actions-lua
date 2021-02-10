@@ -159,7 +159,13 @@ async function main() {
 
     if (!(await exists(luaInstallPath))) {
       await install(luaInstallPath, luaVersion)
-      await ch.saveCache([luaInstallPath], cacheKey)
+      try {
+        await ch.saveCache([luaInstallPath], cacheKey)
+      } catch (ex) {
+        // This could happen due to a race condition, in which case it should be safe to ignore saving the cache
+        if (ex instanceof ch.ReserveCacheError) return
+        throw ex
+      }
     }
 
     toolCacheDir = await tc.cacheDir(luaInstallPath, 'lua', luaVersion)
