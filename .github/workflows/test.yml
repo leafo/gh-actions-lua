@@ -14,10 +14,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@main
+
     - uses: './'
       with:
         luaVersion: ${{ matrix.luaVersion }}
         ignoreCache: true
+
+    - uses: './'
+      with:
+        luaVersion: ${{ matrix.luaVersion }}
 
     - name: test lua
       run: lua -e 'print("hi from lua")'
