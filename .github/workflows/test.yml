@@ -24,17 +24,6 @@ jobs:
     - name: Test Lua
       run: lua -e 'print("hi from lua")'
 
-    - name: Delete install
-      run: rm -rf .lua
-
-    - name: Test tool cache
-      uses: './'
-      with:
-        luaVersion: ${{ matrix.luaVersion }}
-
-    - name: Test Lua
-      run: lua -e 'print("hi from lua")'
-
   test-cache:
     needs: test
 
