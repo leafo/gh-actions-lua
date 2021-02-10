@@ -165,8 +165,9 @@ async function main() {
         await ch.saveCache([luaInstallPath], cacheKey)
       } catch (ex) {
         // This could happen due to a race condition, in which case it should be safe to ignore saving the cache
-        if (ex instanceof ch.ReserveCacheError) return
-        throw ex
+        if (!(ex instanceof ch.ReserveCacheError)) {
+          throw ex
+        }
       }
     }
 
