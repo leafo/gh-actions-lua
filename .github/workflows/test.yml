@@ -17,6 +17,7 @@ jobs:
     - uses: './'
       with:
         luaVersion: ${{ matrix.luaVersion }}
+        ignoreCache: true
 
     - name: test lua
       run: lua -e 'print("hi from lua")'

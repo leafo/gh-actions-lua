@@ -155,7 +155,9 @@ async function main() {
 
   if (!toolCacheDir) {
     const cacheKey = makeCacheKey(luaVersion)
-    await ch.restoreCache([luaInstallPath], cacheKey) // @actions/cache does persist across jobs
+    if (core.getInput('ignoreCache') != 'true') {
+      await ch.restoreCache([luaInstallPath], cacheKey) // @actions/cache does persist across jobs
+    }
 
     if (!(await exists(luaInstallPath))) {
       await install(luaInstallPath, luaVersion)
