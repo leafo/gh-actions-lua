@@ -15,15 +15,44 @@ jobs:
     steps:
     - uses: actions/checkout@main
 
-    - uses: './'
+    - name: Build Lua
+      uses: './'
       with:
         luaVersion: ${{ matrix.luaVersion }}
         ignoreCache: true
 
-    - uses: './'
+    - name: Test Lua
+      run: lua -e 'print("hi from lua")'
+
+    - name: Delete install
+      run: rm -rf .lua
+
+    - name: Test tool cache
+      uses: './'
       with:
         luaVersion: ${{ matrix.luaVersion }}
 
-    - name: test lua
+    - name: Test Lua
       run: lua -e 'print("hi from lua")'
 
+  test-cache:
+    needs: test
+
+    strategy:
+      fail-fast: false
+      matrix:
+        luaVersion: ["5.1.5", "5.2.4", "5.3.5", "5.4.1", "luajit-2.0.5", "luajit-2.1.0-beta3", "luajit-openresty", "5.1", "5.4"]
+        machineTag: ["ubuntu-latest", "macos-latest"]
+
+    runs-on: ${{ matrix.machineTag }}
+
+    steps:
+    - uses: actions/checkout@main
+
+    - name: Get Lua from cache
+      uses: './'
+      with:
+        luaVersion: ${{ matrix.luaVersion }}
+
+    - name: Test Lua
+      run: lua -e 'print("hi from lua")'
