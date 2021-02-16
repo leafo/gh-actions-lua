@@ -14,10 +14,10 @@ inputs:
   luaCompileFlags:
     description: "Command line flags passed to make when building Lua"
     required: false
-  ignoreCache:
-    description: "Set to 'true' to skip restoring .lua from cache and always compile it"
+  buildCache:
+    description: "Set to 'false' to skip restoring .lua from cache and always compile it"
     required: false
-    default: 'false'
+    default: 'true'
 
 runs:
   using: 'node12'
