@@ -24,6 +24,12 @@ const VERSION_ALIASES = {
 
 const isMacOS = () => (process.platform || "").startsWith("darwin")
 
+// Returns posix path for process.cwd()
+const processCwd = () => {
+  const p = require("path");
+  return process.cwd().split(p.sep).join(p.posix.sep);
+}
+
 async function install_luajit_openresty(luaInstallPath) {
   const buildPath = path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX)
   const luaCompileFlags = core.getInput('luaCompileFlags')
@@ -146,7 +152,7 @@ async function main() {
     luaVersion = VERSION_ALIASES[luaVersion]
   }
 
-  const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
+  const luaInstallPath = path.join(processCwd(), LUA_PREFIX)
 
   let toolCacheDir = tc.find('lua', luaVersion)
 
