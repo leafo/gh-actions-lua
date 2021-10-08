@@ -6,7 +6,7 @@ const tc = require("@actions/tool-cache")
 const ch = require("@actions/cache")
 const fsp = require("fs").promises
 
-const path = require("path")
+const path = require("path").posix
 
 const INSTALL_PREFIX = ".install"
 const LUA_PREFIX = ".lua"
@@ -21,8 +21,14 @@ const VERSION_ALIASES = {
 
 const isMacOS = () => (process.platform || "").startsWith("darwin")
 
+// Returns posix path for process.cwd()
+const processCwd = () => {
+  const p = require("path");
+  return process.cwd().split(p.sep).join(p.posix.sep);
+}
+
 async function install_luajit_openresty(luaInstallPath) {
-  const installPath = path.join(process.cwd(), INSTALL_PREFIX)
+  const installPath = path.join(processCwd(), INSTALL_PREFIX)
   const luaCompileFlags = core.getInput('luaCompileFlags')
 
   await io.mkdirP(installPath)
@@ -55,7 +61,7 @@ async function install_luajit_openresty(luaInstallPath) {
 }
 
 async function install_luajit(luaInstallPath, luajitVersion) {
-  const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `LuaJIT-${luajitVersion}`)
+  const luaExtractPath = path.join(processCwd(), INSTALL_PREFIX, `LuaJIT-${luajitVersion}`)
 
   const luaCompileFlags = core.getInput('luaCompileFlags')
 
@@ -87,7 +93,7 @@ async function install_luajit(luaInstallPath, luajitVersion) {
 }
 
 async function install_plain_lua(luaInstallPath, luaVersion) {
-  const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `lua-${luaVersion}`)
+  const luaExtractPath = path.join(processCwd(), INSTALL_PREFIX, `lua-${luaVersion}`)
   const luaCompileFlags = core.getInput('luaCompileFlags')
 
   const luaSourceTar = await tc.downloadTool(`https://www.lua.org/ftp/lua-${luaVersion}.tar.gz`)
@@ -148,7 +154,7 @@ async function main() {
     luaVersion = VERSION_ALIASES[luaVersion]
   }
 
-  const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
+  const luaInstallPath = path.join(processCwd(), LUA_PREFIX)
 
   // The tool cache is mostly useful on self-hosted runners. It doesn't persist across jobs in Github's runners
   let toolCacheDir = tc.find('lua', luaVersion)
