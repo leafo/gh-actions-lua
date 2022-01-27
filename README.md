@@ -19,7 +19,7 @@ Other Lua GitHub actions:
 
 ## Usage
 
-Install Lua: (Will typically default to the latest release, 5.4.2 as of this readme)
+Install Lua: (Will typically default to the latest release, 5.4.4 as of this readme)
 
 ```yaml
 - uses: leafo/gh-actions-lua@v8.0.0
@@ -55,7 +55,7 @@ Examples of versions:
 * `"5.1.5"`
 * `"5.2.4"`
 * `"5.3.5"`
-* `"5.4.1"`
+* `"5.4.4"`
 * `"luajit-2.0.5"`
 * `"luajit-2.1.0-beta3"`
 * `"luajit-openresty"`
