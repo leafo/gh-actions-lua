@@ -19,7 +19,7 @@ Other Lua GitHub actions:
 
 ## Usage
 
-Install Lua: (Will typically default to the latest release, 5.4.2 as of this readme)
+Install Lua: (Will typically default to the latest release, 5.4.4 as of this readme)
 
 ```yaml
 - uses: leafo/gh-actions-lua@v9
