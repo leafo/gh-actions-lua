@@ -150,26 +150,26 @@ async function main() {
 
   const luaInstallPath = path.join(process.cwd(), LUA_PREFIX)
 
-  // The tool cache is mostly useful on self-hosted runners. It doesn't persist across jobs in Github's runners
   let toolCacheDir = tc.find('lua', luaVersion)
 
   if (!toolCacheDir) {
     const cacheKey = makeCacheKey(luaVersion)
     if (core.getInput('buildCache') == 'true') {
-      await ch.restoreCache([luaInstallPath], cacheKey) // @actions/cache does persist across jobs
+      const restoredCache = await ch.restoreCache([luaInstallPath], cacheKey)
+      if (restoredCache) {
+        core.notice(`Cache restored: ${restoredCache}`)
+      } else {
+        core.notice(`No cache available, clean build`)
+      }
     }
 
     if (!(await exists(luaInstallPath))) {
       await install(luaInstallPath, luaVersion)
       try {
+        core.notice(`Storing into cache: ${cacheKey}`)
         await ch.saveCache([luaInstallPath], cacheKey)
       } catch (ex) {
-        // This could happen due to a race condition, in which case it should be safe to ignore saving the cache
-        if (ex instanceof ch.ReserveCacheError) {
-          console.log(`Cannot save cache. (${ex.message}) Skipping...`)
-        } else { 
-          throw ex
-        }
+        core.warning(`Failed to save to cache (continuing anyway): ${e}`)
       }
     }
 
