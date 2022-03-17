@@ -6,6 +6,9 @@ const tc = require("@actions/tool-cache")
 const ch = require("@actions/cache")
 const fsp = require("fs").promises
 
+const notice = (msg) => core.notice(`gh-actions-lua: ${msg}`)
+const warning = (msg) => core.warning(`gh-actions-lua: ${msg}`)
+
 const path = require("path")
 
 const INSTALL_PREFIX = ".install"
@@ -157,19 +160,19 @@ async function main() {
     if (core.getInput('buildCache') == 'true') {
       const restoredCache = await ch.restoreCache([luaInstallPath], cacheKey)
       if (restoredCache) {
-        core.notice(`Cache restored: ${restoredCache}`)
+        notice(`Cache restored: ${restoredCache}`)
       } else {
-        core.notice(`No cache available, clean build`)
+        notice(`No cache available, clean build`)
       }
     }
 
     if (!(await exists(luaInstallPath))) {
       await install(luaInstallPath, luaVersion)
       try {
-        core.notice(`Storing into cache: ${cacheKey}`)
+        notice(`Storing into cache: ${cacheKey}`)
         await ch.saveCache([luaInstallPath], cacheKey)
       } catch (e) {
-        core.warning(`Failed to save to cache (continuing anyway): ${e}`)
+        warning(`Failed to save to cache (continuing anyway): ${e}`)
       }
     }
 
