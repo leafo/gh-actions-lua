@@ -34,7 +34,7 @@ async function install_luajit_openresty(luaInstallPath) {
     cwd: installPath
   })
 
-  let finalCompileFlags = "-j4"
+  let finalCompileFlags = "-j"
 
   if (isMacOS()) {
     finalCompileFlags += " MACOSX_DEPLOYMENT_TARGET=10.15"
@@ -44,11 +44,11 @@ async function install_luajit_openresty(luaInstallPath) {
     finalCompileFlags += ` ${luaCompileFlags}`
   }
 
-  await exec.exec("make", finalCompileFlags, {
+  await exec.exec(`make ${finalCompileFlags}`, undefined, {
     cwd: path.join(installPath, "luajit2")
   })
 
-  await exec.exec(`make -j4 install PREFIX="${luaInstallPath}"`, undefined, {
+  await exec.exec(`make -j install PREFIX="${luaInstallPath}"`, undefined, {
     cwd: path.join(installPath, "luajit2")
   })
 
@@ -66,7 +66,7 @@ async function install_luajit(luaInstallPath, luajitVersion) {
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
 
-  let finalCompileFlags = "-j4"
+  let finalCompileFlags = "-j"
 
   if (isMacOS()) {
     finalCompileFlags += " MACOSX_DEPLOYMENT_TARGET=10.15"
@@ -76,11 +76,11 @@ async function install_luajit(luaInstallPath, luajitVersion) {
     finalCompileFlags += ` ${luaCompileFlags}`
   }
 
-  await exec.exec("make", finalCompileFlags, {
+  await exec.exec(`make ${finalCompileFlags}`, undefined, {
     cwd: luaExtractPath
   })
 
-  await exec.exec(`make -j4 install PREFIX="${luaInstallPath}"`, undefined, {
+  await exec.exec(`make -j install PREFIX="${luaInstallPath}"`, undefined, {
     cwd: luaExtractPath
   })
 
@@ -108,17 +108,17 @@ async function install_plain_lua(luaInstallPath, luaVersion) {
     })
   }
 
-  let finalCompileFlags = `-j4 ${isMacOS() ? "macosx" : "linux"}`
+  let finalCompileFlags = `-j ${isMacOS() ? "macosx" : "linux"}`
 
   if (luaCompileFlags) {
     finalCompileFlags += ` ${luaCompileFlags}`
   }
 
-  await exec.exec("make", finalCompileFlags, {
+  await exec.exec(`make ${finalCompileFlags}`, undefined, {
     cwd: luaExtractPath
   })
 
-  await exec.exec(`make -j4 INSTALL_TOP="${luaInstallPath}" install`, undefined, {
+  await exec.exec(`make -j INSTALL_TOP="${luaInstallPath}" install`, undefined, {
     cwd: luaExtractPath
   })
 }
