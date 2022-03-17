@@ -11,6 +11,16 @@ import { TokenResponse } from "./tokenResponse";
 const DEFAULT_AUTHORIZATION_SCHEME = "Bearer";
 
 /**
+ * Resource manager endpoints to match in order to specify a valid scope to the AzureIdentityCredentialAdapter.
+ */
+export const azureResourceManagerEndpoints = [
+  "https://management.windows.net",
+  "https://management.chinacloudapi.cn",
+  "https://management.usgovcloudapi.net",
+  "https://management.cloudapi.de",
+];
+
+/**
  * This class provides a simple extension to use {@link TokenCredential} from `@azure/identity` library to
  * use with legacy Azure SDKs that accept {@link ServiceClientCredentials} family of credentials for authentication.
  */

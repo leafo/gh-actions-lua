@@ -67,6 +67,16 @@ export interface HttpOperationResponse extends HttpResponse {
    * Always undefined in the browser.
    */
   readableStreamBody?: NodeJS.ReadableStream;
+
+  /**
+   * The redirected property indicates whether the response is the result of a request which was redirected.
+   */
+  redirected?: boolean;
+
+  /**
+   * The url property contains the URL of the response. The value will be the final URL obtained after any redirects.
+   */
+  url?: string;
 }
 
 /**
