@@ -34,17 +34,17 @@ async function install_luajit_openresty(luaInstallPath) {
     cwd: installPath
   })
 
-  const compileFlagsArray = [ "-j" ]
+  let finalCompileFlags = "-j"
 
   if (isMacOS()) {
-    compileFlagsArray.push("MACOSX_DEPLOYMENT_TARGET=10.15")
+    finalCompileFlags += " MACOSX_DEPLOYMENT_TARGET=10.15"
   }
 
   if (luaCompileFlags) {
-    compileFlagsArray.push(luaCompileFlags)
+    finalCompileFlags += ` ${luaCompileFlags}`
   }
 
-  await exec.exec("make", compileFlagsArray, {
+  await exec.exec("make", finalCompileFlags, {
     cwd: path.join(installPath, "luajit2")
   })
 
@@ -66,17 +66,17 @@ async function install_luajit(luaInstallPath, luajitVersion) {
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
 
-  const compileFlagsArray = [ "-j" ]
+  let finalCompileFlags = "-j"
 
   if (isMacOS()) {
-    compileFlagsArray.push("MACOSX_DEPLOYMENT_TARGET=10.15")
+    finalCompileFlags += " MACOSX_DEPLOYMENT_TARGET=10.15"
   }
 
   if (luaCompileFlags) {
-    compileFlagsArray.push(luaCompileFlags)
+    finalCompileFlags += ` ${luaCompileFlags}`
   }
 
-  await exec.exec("make", compileFlagsArray, {
+  await exec.exec("make", finalCompileFlags, {
     cwd: luaExtractPath
   })
 
@@ -108,17 +108,13 @@ async function install_plain_lua(luaInstallPath, luaVersion) {
     })
   }
 
-  const makefilePlatform = isMacOS() ? "macosx" : "linux"
-  const compileFlagsArray = [
-    "-j",
-    makefilePlatform,
-  ]
+  let finalCompileFlags = `-j ${isMacOS() ? "macosx" : "linux"}`
 
   if (luaCompileFlags) {
-    compileFlagsArray.push(luaCompileFlags)
+    finalCompileFlags += ` ${luaCompileFlags}`
   }
 
-  await exec.exec("make", compileFlagsArray, {
+  await exec.exec("make", finalCompileFlags, {
     cwd: luaExtractPath
   })
 
@@ -140,12 +136,11 @@ async function install(luaInstallPath, luaVersion) {
   return await install_plain_lua(luaInstallPath, luaVersion)
 }
 
-const makeCacheKey = luaVersion=> `setup-lua-${luaVersion}-${process.platform}-${process.arch}`
+const makeCacheKey = (luaVersion, compileFlags) => `lua:${luaVersion}:${process.platform}:${process.arch}:${compileFlags}`
 const exists = (filename, mode) => fsp.access(filename, mode).then(() => true, () => false)
 
 async function main() {
   let luaVersion = core.getInput('luaVersion', { required: true })
-  let luaCompileFlags = core.getInput('luaCompileFlags')
 
   if (VERSION_ALIASES[luaVersion]) {
     luaVersion = VERSION_ALIASES[luaVersion]
@@ -156,7 +151,7 @@ async function main() {
   let toolCacheDir = tc.find('lua', luaVersion)
 
   if (!toolCacheDir) {
-    const cacheKey = makeCacheKey(luaVersion)
+    const cacheKey = makeCacheKey(luaVersion, core.getInput('luaCompileFlags') || "")
     if (core.getInput('buildCache') == 'true') {
       const restoredCache = await ch.restoreCache([luaInstallPath], cacheKey)
       if (restoredCache) {
