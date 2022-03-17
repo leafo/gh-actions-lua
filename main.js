@@ -168,7 +168,7 @@ async function main() {
       try {
         core.notice(`Storing into cache: ${cacheKey}`)
         await ch.saveCache([luaInstallPath], cacheKey)
-      } catch (ex) {
+      } catch (e) {
         core.warning(`Failed to save to cache (continuing anyway): ${e}`)
       }
     }
