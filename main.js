@@ -11,8 +11,8 @@ const warning = (msg) => core.warning(`gh-actions-lua: ${msg}`)
 
 const path = require("path")
 
-const INSTALL_PREFIX = ".install"
-const LUA_PREFIX = ".lua"
+const BUILD_PREFIX = ".lua-build" // this is a temporary folder where lua will be built
+const LUA_PREFIX = ".lua" // this is where Lua will be installed
 
 const VERSION_ALIASES = {
   "5.1": "5.1.5",
@@ -25,13 +25,13 @@ const VERSION_ALIASES = {
 const isMacOS = () => (process.platform || "").startsWith("darwin")
 
 async function install_luajit_openresty(luaInstallPath) {
-  const installPath = path.join(process.cwd(), INSTALL_PREFIX)
+  const buildPath = path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX)
   const luaCompileFlags = core.getInput('luaCompileFlags')
 
-  await io.mkdirP(installPath)
+  await io.mkdirP(buildPath)
 
   await exec.exec("git clone https://github.com/openresty/luajit2.git", undefined, {
-    cwd: installPath
+    cwd: buildPath
   })
 
   let finalCompileFlags = "-j"
@@ -45,11 +45,11 @@ async function install_luajit_openresty(luaInstallPath) {
   }
 
   await exec.exec(`make ${finalCompileFlags}`, undefined, {
-    cwd: path.join(installPath, "luajit2")
+    cwd: path.join(buildPath, "luajit2")
   })
 
   await exec.exec(`make -j install PREFIX="${luaInstallPath}"`, undefined, {
-    cwd: path.join(installPath, "luajit2")
+    cwd: path.join(buildPath, "luajit2")
   })
 
   await exec.exec("ln -s luajit lua", undefined, {
@@ -58,13 +58,13 @@ async function install_luajit_openresty(luaInstallPath) {
 }
 
 async function install_luajit(luaInstallPath, luajitVersion) {
-  const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `LuaJIT-${luajitVersion}`)
+  const luaExtractPath = path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX, `LuaJIT-${luajitVersion}`)
 
   const luaCompileFlags = core.getInput('luaCompileFlags')
 
   const luaSourceTar = await tc.downloadTool(`https://luajit.org/download/LuaJIT-${luajitVersion}.tar.gz`)
   await io.mkdirP(luaExtractPath)
-  await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
+  await tc.extractTar(luaSourceTar, path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX)
 
   let finalCompileFlags = "-j"
 
@@ -90,12 +90,12 @@ async function install_luajit(luaInstallPath, luajitVersion) {
 }
 
 async function install_plain_lua(luaInstallPath, luaVersion) {
-  const luaExtractPath = path.join(process.cwd(), INSTALL_PREFIX, `lua-${luaVersion}`)
+  const luaExtractPath = path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX, `lua-${luaVersion}`)
   const luaCompileFlags = core.getInput('luaCompileFlags')
 
   const luaSourceTar = await tc.downloadTool(`https://www.lua.org/ftp/lua-${luaVersion}.tar.gz`)
   await io.mkdirP(luaExtractPath)
-  await tc.extractTar(luaSourceTar, INSTALL_PREFIX)
+  await tc.extractTar(luaSourceTar, path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX))
 
   if (isMacOS()) {
     await exec.exec("brew install readline ncurses")
