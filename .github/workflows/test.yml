@@ -24,7 +24,7 @@ jobs:
         buildCache: false
 
     - name: Test Lua
-      run: lua -e 'print("hi from lua")'
+      run: lua -e "print('hi from lua')"
 
   test-cache:
     needs: test
@@ -46,4 +46,4 @@ jobs:
         luaVersion: ${{ matrix.luaVersion }}
 
     - name: Test Lua
-      run: lua -e 'print("hi from lua")'
+      run: lua -e "print('hi from lua')"
