@@ -30,6 +30,20 @@ const processCwd = () => {
   return process.cwd().split(p.sep).join(p.posix.sep);
 }
 
+async function finish_luajit_install(src, dst, luajit) {
+  if (isWindows()) {
+    await fsp.copyFile(path.join(src, "lua51.dll"), path.join(dst, "bin", "lua51.dll"))
+
+    await exec.exec(`ln -s ${luajit} lua.exe`, undefined, {
+      cwd: path.join(dst, "bin")
+    })
+  } else {
+    await exec.exec(`ln -s ${luajit} lua`, undefined, {
+      cwd: path.join(dst, "bin")
+    })
+  }
+}
+
 async function install_luajit_openresty(luaInstallPath) {
   const buildPath = path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX)
   const luaCompileFlags = core.getInput('luaCompileFlags')
@@ -58,9 +72,7 @@ async function install_luajit_openresty(luaInstallPath) {
     cwd: path.join(buildPath, "luajit2")
   })
 
-  await exec.exec("ln -s luajit lua", undefined, {
-    cwd: path.join(luaInstallPath, "bin")
-  })
+  await finish_luajit_install(path.join(installPath, "luajit2", "src"), luaInstallPath, "luajit-2.1.0-beta3")
 }
 
 async function install_luajit(luaInstallPath, luajitVersion) {
@@ -90,9 +102,7 @@ async function install_luajit(luaInstallPath, luajitVersion) {
     cwd: luaExtractPath
   })
 
-  await exec.exec(`ln -s luajit-${luajitVersion} lua`, undefined, {
-    cwd: path.join(luaInstallPath, "bin")
-  })
+  await finish_luajit_install(path.join(luaExtractPath, "src"), luaInstallPath, `luajit-${luajitVersion}`)
 }
 
 async function install_plain_lua(luaInstallPath, luaVersion) {
