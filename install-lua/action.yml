@@ -20,12 +20,5 @@ inputs:
     default: 'true'
 
 runs:
-  using: "composite"
-  steps:
-    - uses: ilammy/msvc-dev-cmd@v1
-      if: ${{ !startsWith(matrix.luaVersion, 'luajit') }}
-    - uses: ./install-lua
-      with:
-        luaVersion: ${{ inputs.luaVersion }}
-        luaCompileFlags: ${{ inputs.luaCompileFlags }}
-        buildCache: ${{ inputs.buildCache }}
+  using: "node16"
+  main: "main.js"
