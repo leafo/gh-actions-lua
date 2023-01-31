@@ -4,7 +4,7 @@
 
 [![Actions Status](https://github.com/leafo/gh-actions-lua/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-lua/actions)
 
-**Update  Nov 18, 2020**: You must use version 8 or greater as GitHub has
+**Note**: You must use version 8 or greater as GitHub has
 deprecated older versions of the actions core libraries.
 
 Builds and installs Lua into the `.lua/` directory in the working directory.
@@ -22,13 +22,13 @@ Other Lua GitHub actions:
 Install Lua: (Will typically default to the latest release, 5.4.4 as of this readme)
 
 ```yaml
-- uses: leafo/gh-actions-lua@v9
+- uses: leafo/gh-actions-lua@v10
 ```
 
 Install specific version of Lua:
 
 ```yaml
-- uses: leafo/gh-actions-lua@v9
+- uses: leafo/gh-actions-lua@v10
   with:
     luaVersion: "5.1.5"
 ```
@@ -36,9 +36,18 @@ Install specific version of Lua:
 Install specific version of LuaJIT:
 
 ```yaml
-- uses: leafo/gh-actions-lua@v9
+- uses: leafo/gh-actions-lua@v10
   with:
     luaVersion: "luajit-2.1.0-beta3"
+```
+
+When using Windows the following prerequisite action must be run before
+building Lua: [`ilammy/msvc-dev-cmd@v1`](https://github.com/ilammy/msvc-dev-cmd). It is safe to
+include this line on non-Windows platforms, as the action will do nothing in those cases.
+
+```yaml
+- uses: ilammy/msvc-dev-cmd@v1
+- uses: leafo/gh-actions-lua@v10
 ```
 
 ## Inputs
@@ -107,7 +116,7 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - uses: leafo/gh-actions-lua@v9
+    - uses: leafo/gh-actions-lua@v10
       with:
         luaVersion: "5.1.5"
 
@@ -144,7 +153,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - uses: leafo/gh-actions-lua@v9
+    - uses: leafo/gh-actions-lua@v10
       with:
         luaVersion: ${{ matrix.luaVersion }}
 
