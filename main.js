@@ -77,7 +77,7 @@ async function install_luajit_openresty(luaInstallPath) {
     cwd: pathJoin(buildPath, "luajit2")
   })
 
-  await finish_luajit_install(pathJoin(buildPath, "luajit2", "src"), luaInstallPath, "luajit-2.1.0-beta3")
+  await finish_luajit_install(pathJoin(buildPath, "luajit2", "src"), luaInstallPath, "luajit")
 }
 
 async function install_luajit(luaInstallPath, luajitVersion) {
