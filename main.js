@@ -70,7 +70,8 @@ async function install_luajit_openresty(luaInstallPath) {
   }
 
   await exec.exec(`make ${finalCompileFlags}`, undefined, {
-    cwd: pathJoin(buildPath, "luajit2")
+    cwd: pathJoin(buildPath, "luajit2"),
+    ...(isWindows() ? { env: { SHELL: 'cmd' }} : {})
   })
 
   await exec.exec(`make -j install PREFIX="${luaInstallPath}"`, undefined, {
