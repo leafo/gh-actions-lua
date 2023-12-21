@@ -196,7 +196,7 @@ async function install_plain_lua(luaInstallPath, luaVersion) {
   const luaExtractPath = pathJoin(process.env["RUNNER_TEMP"], BUILD_PREFIX, `lua-${luaVersion}`)
   const luaCompileFlags = core.getInput('luaCompileFlags')
 
-  const luaSourceTar = await tc.downloadTool(`https://www.lua.org/ftp/lua-${luaVersion}.tar.gz`)
+  const luaSourceTar = await tc.downloadTool(`https://lua.org/ftp/lua-${luaVersion}.tar.gz`)
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX))
 
