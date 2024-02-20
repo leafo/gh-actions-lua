@@ -1,8 +1,8 @@
 # Github Action for Lua and LuaJIT
 
-### `leafo/gh-actions-lua`
+### `jkl1337/gh-actions-lua`
 
-[![Actions Status](https://github.com/leafo/gh-actions-lua/workflows/test/badge.svg)](https://github.com/leafo/gh-actions-lua/actions)
+[![Actions Status](https://github.com/jkl1337/gh-actions-lua/workflows/test/badge.svg)](https://github.com/jkl1337/gh-actions-lua/actions)
 
 **Note**: You must use version 8 or greater as GitHub has
 deprecated older versions of the actions core libraries.
@@ -13,7 +13,7 @@ directly in workflows.
 
 Other Lua GitHub actions:
 
-* [`leafo/gh-actions-luarocks`](https://github.com/leafo/gh-actions-luarocks)
+* [`jkl1337/gh-actions-luarocks`](https://github.com/jkl1337/gh-actions-luarocks)
   * inputs: `luarocksVersion`
 
 
@@ -22,13 +22,13 @@ Other Lua GitHub actions:
 Install Lua: (Will typically default to the latest release, 5.4.4 as of this readme)
 
 ```yaml
-- uses: leafo/gh-actions-lua@v10
+- uses: jkl1337/gh-actions-lua@v10
 ```
 
 Install specific version of Lua:
 
 ```yaml
-- uses: leafo/gh-actions-lua@v10
+- uses: jkl1337/gh-actions-lua@v10
   with:
     luaVersion: "5.1.5"
 ```
@@ -36,7 +36,7 @@ Install specific version of Lua:
 Install specific version of LuaJIT:
 
 ```yaml
-- uses: leafo/gh-actions-lua@v10
+- uses: jkl1337/gh-actions-lua@v10
   with:
     luaVersion: "luajit-2.1.0-beta3"
 ```
@@ -47,7 +47,7 @@ include this line on non-Windows platforms, as the action will do nothing in tho
 
 ```yaml
 - uses: ilammy/msvc-dev-cmd@v1
-- uses: leafo/gh-actions-lua@v10
+- uses: jkl1337/gh-actions-lua@v10
 ```
 
 ## Inputs
@@ -89,7 +89,7 @@ Additional flags to pass to `make` when building Lua.
 Example value:
 
 ```yaml
-- uses: leafo/gh-actions-lua@master
+- uses: jkl1337/gh-actions-lua@master
   with:
     luaVersion: 5.3
     luaCompileFlags: LUA_CFLAGS="-DLUA_INT_TYPE=LUA_INT_INT"
@@ -116,11 +116,11 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - uses: leafo/gh-actions-lua@v10
+    - uses: jkl1337/gh-actions-lua@v10
       with:
         luaVersion: "5.1.5"
 
-    - uses: leafo/gh-actions-luarocks@v4
+    - uses: jkl1337/gh-actions-luarocks@v4
 
     - name: build
       run: |
@@ -153,7 +153,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - uses: leafo/gh-actions-lua@v10
+    - uses: jkl1337/gh-actions-lua@v10
       with:
         luaVersion: ${{ matrix.luaVersion }}
 

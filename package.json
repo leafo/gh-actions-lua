@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "leaf corcoran <leafot@gmail.com>",
+  "author": "John Luebs <john@luebs.org>",
   "license": "MIT",
   "dependencies": {
     "@actions/cache": "^3.1.2",
