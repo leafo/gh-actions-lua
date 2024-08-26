@@ -19,7 +19,35 @@ const VERSION_ALIASES = {
   "5.2": "5.2.4",
   "5.3": "5.3.6",
   "5.4": "5.4.4",
-  "luajit": "luajit-2.1.0-beta3",
+  "luajit": "luajit-2.1",
+}
+
+const LUAJIT_REPOS = {
+  "luajit-2.0": {
+    "url": "https://github.com/luajit/luajit.git",
+    "branch": "v2.0",
+    "binary": "luajit"
+  },
+  "luajit-2.1": {
+    "url": "https://github.com/luajit/luajit.git",
+    "branch": "v2.1",
+    "binary": "luajit"
+  },
+  "luajit-2.1.0-beta3": {
+    "url": "https://github.com/luajit/luajit.git",
+    "branch": "v2.1.0-beta3",
+    "binary": "luajit-2.1.0-beta3"
+  },
+  "luajit-master": {
+    "url": "https://github.com/luajit/luajit.git",
+    "branch": "master",
+    "binary": "luajit"
+  },
+  "luajit-openresty": {
+    "url": "https://github.com/openresty/luajit2.git",
+    "branch": "v2.1-agentzh",
+    "binary": "luajit"
+  },
 }
 
 const isMacOS = () => (process.platform || "").startsWith("darwin")
@@ -49,13 +77,27 @@ async function finish_luajit_install(src, dst, luajit) {
   }
 }
 
-async function install_luajit_openresty(luaInstallPath) {
+async function install_luajit(luaInstallPath, luaVersion) {
+  const luajitVersion = luaVersion.substr("luajit-".length)
+
+  let repo = LUAJIT_REPOS[luaVersion];
+  if (!repo) {
+    repo = {
+      "url": LUAJIT_REPOS["luajit-master"].url,
+      "branch": "v" + luajitVersion,
+      "binary": "luajit"
+    }
+  }
+
   const buildPath = path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX)
   const luaCompileFlags = core.getInput('luaCompileFlags')
 
+  // "luajit" or "luajit2"
+  const baseDir = repo.url.match(/.*\/(.*)\.git/)[1]
+
   await io.mkdirP(buildPath)
 
-  await exec.exec("git clone https://github.com/openresty/luajit2.git", undefined, {
+  await exec.exec(`git clone --branch ${repo.branch} --single-branch ${repo.url}`, undefined, {
     cwd: buildPath
   })
 
@@ -70,45 +112,15 @@ async function install_luajit_openresty(luaInstallPath) {
   }
 
   await exec.exec(`make ${finalCompileFlags}`, undefined, {
-    cwd: pathJoin(buildPath, "luajit2"),
+    cwd: pathJoin(buildPath, baseDir),
     ...(isWindows() ? { env: { SHELL: 'cmd' }} : {})
   })
 
   await exec.exec(`make -j install PREFIX="${luaInstallPath}"`, undefined, {
-    cwd: pathJoin(buildPath, "luajit2")
+    cwd: pathJoin(buildPath, baseDir)
   })
 
-  await finish_luajit_install(pathJoin(buildPath, "luajit2", "src"), luaInstallPath, "luajit")
-}
-
-async function install_luajit(luaInstallPath, luajitVersion) {
-  const luaExtractPath = pathJoin(process.env["RUNNER_TEMP"], BUILD_PREFIX, `LuaJIT-${luajitVersion}`)
-
-  const luaCompileFlags = core.getInput('luaCompileFlags')
-
-  const luaSourceTar = await tc.downloadTool(`https://luajit.org/download/LuaJIT-${luajitVersion}.tar.gz`)
-  await io.mkdirP(luaExtractPath)
-  await tc.extractTar(luaSourceTar, path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX))
-
-  let finalCompileFlags = "-j"
-
-  if (isMacOS()) {
-    finalCompileFlags += " MACOSX_DEPLOYMENT_TARGET=10.15"
-  }
-
-  if (luaCompileFlags) {
-    finalCompileFlags += ` ${luaCompileFlags}`
-  }
-
-  await exec.exec(`make ${finalCompileFlags}`, undefined, {
-    cwd: luaExtractPath
-  })
-
-  await exec.exec(`make -j install PREFIX="${luaInstallPath}"`, undefined, {
-    cwd: luaExtractPath
-  })
-
-  await finish_luajit_install(pathJoin(luaExtractPath, "src"), luaInstallPath, `luajit-${luajitVersion}`)
+  await finish_luajit_install(pathJoin(buildPath, baseDir, "src"), luaInstallPath, repo.binary)
 }
 
 async function msvc_link(luaExtractPath, linkCmd, outFile, objs) {
@@ -231,13 +243,8 @@ async function install_plain_lua(luaInstallPath, luaVersion) {
 }
 
 async function install(luaInstallPath, luaVersion) {
-  if (luaVersion == "luajit-openresty") {
-    return await install_luajit_openresty(luaInstallPath)
-  }
-
   if (luaVersion.startsWith("luajit-")) {
-    const luajitVersion = luaVersion.substr("luajit-".length)
-    return await install_luajit(luaInstallPath, luajitVersion)
+    return await install_luajit(luaInstallPath, luaVersion)
   }
 
   return await install_plain_lua(luaInstallPath, luaVersion)
