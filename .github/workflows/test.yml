@@ -7,8 +7,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        luaVersion: ["5.1.5", "5.2.4", "5.3.6", "5.4.4", "luajit-2.0.5", "luajit-2.1.0-beta3", "luajit-openresty", "5.1", "5.4"]
+        luaVersion: ["5.1.5", "5.2.4", "5.3.6", "5.4.4", "luajit", "luajit-2.0", "luajit-2.1", "luajit-2.0.5", "luajit-2.1.0-beta3", "luajit-openresty", "5.1", "5.4"]
         machineTag: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        exclude:
+          - luaVersion: "luajit-2.0"
+            machineTag: "macos-latest"
+          - luaVersion: "luajit-2.0.5"
+            machineTag: "macos-latest"
+          - luaVersion: "luajit-2.0.5"
+            machineTag: "windows-latest"
+          - luaVersion: "luajit-2.1.0-beta3"
+            machineTag: "windows-latest"
 
     runs-on: ${{ matrix.machineTag }}
 
@@ -32,8 +41,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        luaVersion: ["5.1.5", "5.2.4", "5.3.6", "5.4.4", "luajit-2.0.5", "luajit-2.1.0-beta3", "luajit-openresty", "5.1", "5.4"]
+        luaVersion: ["5.1.5", "5.2.4", "5.3.6", "5.4.4", "luajit", "luajit-2.0", "luajit-2.1", "luajit-2.0.5", "luajit-2.1.0-beta3", "luajit-openresty", "5.1", "5.4"]
         machineTag: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        exclude:
+          - luaVersion: "luajit-2.0"
+            machineTag: "macos-latest"
+          - luaVersion: "luajit-2.0.5"
+            machineTag: "macos-latest"
+          - luaVersion: "luajit-2.0.5"
+            machineTag: "windows-latest"
+          - luaVersion: "luajit-2.1.0-beta3"
+            machineTag: "windows-latest"
 
     runs-on: ${{ matrix.machineTag }}
 
