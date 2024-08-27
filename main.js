@@ -66,6 +66,7 @@ const processCwd = () => {
 async function finish_luajit_install(src, dst, luajit) {
   if (isWindows()) {
     await fsp.copyFile(pathJoin(src, "lua51.dll"), pathJoin(dst, "bin", "lua51.dll"))
+    await fsp.copyFile(pathJoin(src, "lua51.dll"), pathJoin(dst, "lib", "lua51.dll"))
 
     await exec.exec(`ln -s ${luajit} lua.exe`, undefined, {
       cwd: pathJoin(dst, "bin")
