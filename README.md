@@ -8,7 +8,7 @@
 deprecated older versions of the actions core libraries.
 
 Builds and installs Lua into the `.lua/` directory in the working directory.
-Adds the `.lua/bin` to the `PATH` environment variable so `lua` can be called
+Adds `.lua/bin` to the `PATH` environment variable so `lua` can be called
 directly in workflows.
 
 Other Lua GitHub actions:
@@ -41,7 +41,7 @@ Install specific version of LuaJIT:
     luaVersion: "luajit-2.1.0-beta3"
 ```
 
-When using Windows the following prerequisite action must be run before
+When using Windows, the following prerequisite action must be run before
 building Lua: [`ilammy/msvc-dev-cmd@v1`](https://github.com/ilammy/msvc-dev-cmd). It is safe to
 include this line on non-Windows platforms, as the action will do nothing in those cases.
 
@@ -134,9 +134,8 @@ jobs:
 
 This example:
 
-* Uses Lua 5.1.5 — You can use another version by chaning the `luaVersion` varible. LuaJIT versions can be used by prefixing the version with `luajit-`, i.e. `luajit-2.1.0-beta3`
+* Uses Lua 5.1.5 — You can use another version by changing the `luaVersion` variable. LuaJIT versions can be used by prefixing the version with `luajit-`, i.e. `luajit-2.1.0-beta3`
 * Uses a `.rockspec` file the root directory of your repository to install dependencies and test packaging the module via `luarocks make`
-
 
 View the documentation for the individual actions (linked above) to learn more about how they work.
 
