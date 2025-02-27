@@ -209,7 +209,16 @@ async function install_plain_lua(luaInstallPath, luaVersion) {
   const luaExtractPath = pathJoin(process.env["RUNNER_TEMP"], BUILD_PREFIX, `lua-${luaVersion}`)
   const luaCompileFlags = core.getInput('luaCompileFlags')
 
-  const luaSourceTar = await tc.downloadTool(`https://lua.org/ftp/lua-${luaVersion}.tar.gz`)
+  const primaryUrl = `https://lua.org/ftp/lua-${luaVersion}.tar.gz`
+  const mirrorUrl = `https://www.tecgraf.puc-rio.br/lua/mirror/ftp/lua-${luaVersion}.tar.gz`
+  let luaSourceTar
+
+  const primaryDownload = tc.downloadTool(primaryUrl)
+  const mirrorDownload = tc.downloadTool(mirrorUrl)
+
+  luaSourceTar = await Promise.race([primaryDownload, mirrorDownload]).catch(async (error) => {
+    throw new Error(`Failed to download Lua source: ${error}`)
+  })
   await io.mkdirP(luaExtractPath)
   await tc.extractTar(luaSourceTar, path.join(process.env["RUNNER_TEMP"], BUILD_PREFIX))
 
