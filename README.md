@@ -38,7 +38,7 @@ Install specific version of LuaJIT:
 ```yaml
 - uses: leafo/gh-actions-lua@v13
   with:
-    luaVersion: "luajit-2.1.0-beta3"
+    luaVersion: "luajit-2.1"
 ```
 
 When using Windows the following prerequisite action must be run before
@@ -63,8 +63,8 @@ Examples of versions:
 
 * `"5.1.5"`
 * `"5.2.4"`
-* `"5.3.5"`
-* `"5.4.1"`
+* `"5.3.6"`
+* `"5.4.8"`
 * `"5.5.0"`
 * `"luajit-2.0"`
 * `"luajit-2.1"`
@@ -116,13 +116,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - uses: leafo/gh-actions-lua@v13
       with:
         luaVersion: "5.1.5"
 
-    - uses: leafo/gh-actions-luarocks@v4
+    - uses: leafo/gh-actions-luarocks@v6
 
     - name: build
       run: |
@@ -136,7 +136,7 @@ jobs:
 
 This example:
 
-* Uses Lua 5.1.5 — You can use another version by chaning the `luaVersion` varible. LuaJIT versions can be used by prefixing the version with `luajit-`, i.e. `luajit-2.1.0-beta3`
+* Uses Lua 5.1.5 — You can use another version by changing the `luaVersion` variable. LuaJIT versions can be used by prefixing the version with `luajit-`, i.e. `luajit-2.1`
 * Uses a `.rockspec` file the root directory of your repository to install dependencies and test packaging the module via `luarocks make`
 
 
@@ -151,10 +151,10 @@ jobs:
   test:
     strategy:
       matrix:
-        luaVersion: ["5.1.5", "5.2.4", "luajit-2.1.0-beta3"]
+        luaVersion: ["5.1.5", "5.2.4", "luajit-2.1"]
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - uses: leafo/gh-actions-lua@v13
       with:
         luaVersion: ${{ matrix.luaVersion }}
