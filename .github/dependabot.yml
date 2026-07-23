@@ -1,0 +1,22 @@
+version: 2
+
+updates:
+  # node_modules is vendored, so these PRs only touch package.json and the
+  # lockfile — run `make vendor` and commit the result before merging
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      npm:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

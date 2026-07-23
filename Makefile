@@ -1,4 +1,4 @@
 
 vendor::
 	-rm -r node_modules
-	npm install --production
+	npm install --omit=dev

@@ -79,7 +79,7 @@ async function finish_luajit_install(src, dst, luajit) {
 }
 
 async function install_luajit(luaInstallPath, luaVersion) {
-  const luajitVersion = luaVersion.substr("luajit-".length)
+  const luajitVersion = luaVersion.slice("luajit-".length)
 
   let repo = LUAJIT_REPOS[luaVersion];
   if (!repo) {
@@ -145,7 +145,11 @@ async function install_files(dstDir, srcDir, files) {
 }
 
 async function install_plain_lua_windows(luaExtractPath, luaInstallPath, luaVersion) {
-  const luaCompileFlags = core.getInput('luaCompileFlags')
+  // The Windows build invokes cl/link directly instead of make, so there is
+  // nothing to pass luaCompileFlags to
+  if (core.getInput('luaCompileFlags')) {
+    warning("luaCompileFlags is ignored when building Lua on Windows")
+  }
 
   let cl = "cl /nologo /MD /O2 /W3 /c /D_CRT_SECURE_NO_DEPRECATE"
 
@@ -220,7 +224,7 @@ async function install_plain_lua(luaInstallPath, luaVersion) {
   if (isMacOS()) {
     await exec.exec("brew install readline ncurses")
   } else {
-    await exec.exec("sudo apt-get install -q libreadline-dev libncurses-dev", undefined, {
+    await exec.exec("sudo apt-get install -qy libreadline-dev libncurses-dev", undefined, {
       env: {
         DEBIAN_FRONTEND: "noninteractive",
         TERM: "linux"

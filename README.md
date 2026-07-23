@@ -75,7 +75,7 @@ The version specifies where the source is downloaded from:
 
 * `luajit-openresty` — will always pull master from https://github.com/openresty/luajit2
 * Anything else starting with `luajit-` — pulls a master or version branch from https://github.com/luajit/luajit
-* Anything else — from https://www.lua.org/ftp/
+* Anything else — from https://lua.org/ftp/
 
 **Version aliases**
 
