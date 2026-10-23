@@ -17,8 +17,8 @@ const VERSION_ALIASES = {
   "5.1": "5.1.5",
   "5.2": "5.2.4",
   "5.3": "5.3.6",
-  "5.4": "5.4.8",
-  "5.5": "5.5.0",
+  "5.4": "5.4.9",
+  "5.5": "5.5.1",
   "luajit": "luajit-2.1",
 }
 
@@ -33,8 +33,9 @@ const LUAJIT_REPOS = {
     "branch": "v2.1",
     "binary": "luajit"
   },
+  // upstream deleted its release tags, the openresty fork still has them
   "luajit-2.1.0-beta3": {
-    "url": "https://github.com/luajit/luajit.git",
+    "url": "https://github.com/openresty/luajit2.git",
     "branch": "v2.1.0-beta3",
     "binary": "luajit-2.1.0-beta3"
   },
@@ -84,7 +85,7 @@ async function install_luajit(luaInstallPath, luaVersion) {
   let repo = LUAJIT_REPOS[luaVersion];
   if (!repo) {
     repo = {
-      "url": LUAJIT_REPOS["luajit-master"].url,
+      "url": LUAJIT_REPOS["luajit-openresty"].url,
       "branch": "v" + luajitVersion,
       "binary": "luajit"
     }
@@ -97,6 +98,9 @@ async function install_luajit(luaInstallPath, luaVersion) {
   const baseDir = repo.url.match(/.*\/(.*)\.git/)[1]
 
   await io.mkdirP(buildPath)
+
+  // self-hosted runners may leave a clone from a previous run in RUNNER_TEMP
+  await io.rmRF(pathJoin(buildPath, baseDir))
 
   await exec.exec(`git clone --branch ${repo.branch} --single-branch ${repo.url}`, undefined, {
     cwd: buildPath
