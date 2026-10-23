@@ -227,13 +227,20 @@ async function install_plain_lua(luaInstallPath, luaVersion) {
 
   if (isMacOS()) {
     await exec.exec("brew install readline ncurses")
-  } else {
-    await exec.exec("sudo apt-get install -qy libreadline-dev libncurses-dev", undefined, {
+  } else if (await io.which("apt-get")) {
+    // root on container/self-hosted runners may not have sudo installed
+    const isRoot = process.getuid && process.getuid() === 0
+    const sudo = isRoot ? "" : "sudo "
+
+    await exec.exec(`${sudo}apt-get install -qy libreadline-dev libncurses-dev`, undefined, {
       env: {
+        ...process.env,
         DEBIAN_FRONTEND: "noninteractive",
         TERM: "linux"
       }
     })
+  } else {
+    warning("apt-get not found, skipping install of readline and ncurses, make sure they are available")
   }
 
   let finalCompileFlags = `-j ${isMacOS() ? "macosx" : "linux"}`
